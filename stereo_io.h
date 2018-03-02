@@ -9,8 +9,8 @@
 
 #include "opencv2/core.hpp"
 
-#include "mio/qt/qtXml.h"
-#include "stereoTypes.h"
+#include "mio/qt/qt_xml.h"
+#include "stereo_types.h"
 #include "mio/altro/opencv.h"
 
 

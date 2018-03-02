@@ -17,8 +17,8 @@
 #include "mio/altro/timers.h"
 #include "mio/altro/types.h"
 #include "mio/math/math.h"
-#include "mvg/stereoTypes.h"
-#include "mvg/stereoIO.h"
+#include "mvg/stereo_types.h"
+#include "mvg/stereo_io.h"
 
 
 template<typename TYPE>
