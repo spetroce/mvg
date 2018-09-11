@@ -79,8 +79,8 @@ inline void DrawEpipolarLine(cv::Mat &img, const cv::Mat &F, const PNT_T &pnt, c
   STD_INVALID_ARG_E(which_image == 0 || which_image == 1)
   line3d_t line;
   FindEpipolarLine(pnt, F, line, which_image);
-  cv::line( img, sm::SolveLineEqn2<cv::Point>(line, 0),
-            sm::SolveLineEqn2<cv::Point>(line, img.cols), cv::Scalar::all(255) );
+  cv::line( img, PNT_T(0, sm::SolveLineEqn2(line, 0)), PNT_T(img.cols, sm::SolveLineEqn2(line, img.cols)),
+            cv::Scalar::all(255) );
 }
 
 
@@ -273,14 +273,8 @@ inline void CalibrateCamera(const camCalTarget_t &cal_target, stereoCalData_t &c
   std::fill(target_points.begin(), target_points.end(), cal_target.point_vec);
 
   rms = cv::calibrateCamera(target_points, cal_data.img_cal_pnts[cam_idx], cal_data.img_size,
-                            cal_data.K[cam_idx], cal_data.D[cam_idx], rvecs, tvecs,
-#if ICV_OPENCV_VERSION_MAJOR < 3
-                            cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 100, 1e-5),
-                            cal_flags);
-#else 
-                            cal_flags,
+                            cal_data.K[cam_idx], cal_data.D[cam_idx], rvecs, tvecs, cal_flags,
                             cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 100, 1e-5) );
-#endif
 
 //  double totalAvgErr = cv::computeReprojectionErrors(target_points, cal_data.img_cal_pnts[cam_idx], rvecs, tvecs,
 //                                                     cal_data.K[cam_idx], cal_data.D[cam_idx], reproj_errs);
@@ -315,14 +309,8 @@ inline void StereoCalibrate(const camCalTarget_t &cal_target,
                                      cal_data.T, //out - translation vector between the coordinate systems of the camera
                                      cal_data.E, //out - essential matrix
                                      cal_data.F, //out - fundamental matrix
-#if ICV_OPENCV_VERSION_MAJOR < 3
-                                     cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 100, 1e-5),
-                                     cal_flags
-#else 
                                      cal_flags,
-                                     cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 100, 1e-5)
-#endif
-                                     );
+                                     cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 100, 1e-5) );
 
 
 
